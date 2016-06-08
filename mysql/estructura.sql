@@ -16,12 +16,6 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
 
---
--- Database: `aw`
---
-CREATE DATABASE IF NOT EXISTS `aw` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci;
-USE `aw`;
-
 -- --------------------------------------------------------
 
 --
@@ -59,7 +53,7 @@ DROP TABLE IF EXISTS `Usuarios`;
 CREATE TABLE IF NOT EXISTS `Usuarios` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(30) COLLATE utf8mb4_spanish_ci NOT NULL,
-  `password` varchar(30) COLLATE utf8mb4_spanish_ci NOT NULL,
+  `password` varchar(70) COLLATE utf8mb4_spanish_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci AUTO_INCREMENT=3 ;
 
