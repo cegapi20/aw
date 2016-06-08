@@ -58,6 +58,20 @@ CREATE TABLE IF NOT EXISTS `Usuarios` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci AUTO_INCREMENT=3 ;
 
 --
+-- Table structure for table `Mensajes`
+--
+
+CREATE TABLE IF NOT EXISTS `Mensajes` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `usuario` int(11) NOT NULL,
+      `mensaje` varchar(140) NOT NULL,
+      `idMensajePadre` int(11) DEFAULT NULL,
+      PRIMARY KEY (`id`),
+      KEY `usuario` (`usuario`),
+      KEY `idMensajePadre` (`idMensajePadre`)
+    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4
+
+--
 -- Constraints for dumped tables
 --
 
@@ -67,6 +81,13 @@ CREATE TABLE IF NOT EXISTS `Usuarios` (
 ALTER TABLE `RolesUsuario`
   ADD CONSTRAINT `RolesUsuario_ibfk_1` FOREIGN KEY (`usuario`) REFERENCES `Usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `RolesUsuario_ibfk_2` FOREIGN KEY (`rol`) REFERENCES `Roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `Mensajes`
+--
+ALTER TABLE `Mensajes`
+  ADD CONSTRAINT `Mensajes_ibfk_2` FOREIGN KEY (`idMensajePadre`) REFERENCES `Mensajes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `Mensajes_ibfk_1` FOREIGN KEY (`usuario`) REFERENCES `Usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
