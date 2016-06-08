@@ -24,7 +24,7 @@ class Usuario {
     return false;
   }
 
-  private static function buscaUsuario($username) {
+  public static function buscaUsuario($username) {
     $app = App::getSingleton();
     $conn = $app->conexionBd();
     $query = sprintf("SELECT * FROM Usuarios WHERE username='%s'", $conn->real_escape_string($username));
@@ -54,6 +54,10 @@ class Usuario {
     $this->roles = [];
   }
 
+  public function id() {
+    return $this->id;
+  }
+
   public function addRol($role) {
     $this->roles[] = $role;
   }
@@ -67,6 +71,10 @@ class Usuario {
   }
 
   public function compruebaPassword($password) {
-    return $this->password === $password;
+    return password_verify($password, $this->password);
+  }
+
+  public function cambiaPassword($nuevoPassword) {
+    $this->password = password_hash($nuevoPassword, PASSWORD_DEFAULT);
   }
 }
