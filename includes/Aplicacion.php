@@ -100,15 +100,16 @@ class Aplicacion {
     return $this->conn;
   }
 
-  public function tieneRol($rol, $cabeceraError='', $mensajeError='') {
+  public function tieneRol($rol, $cabeceraError=NULL, $mensajeError=NULL) {
     if (!isset($_SESSION['roles']) || ! in_array($rol, $_SESSION['roles'])) {
-
-      $bloqueContenido=<<<EOF
-        <h1>$cabeceraError!</h1>
-        <p>$mensajeError.</p>
+      if ( !is_null($cabeceraError) && ! is_null($mensajeError) ) {
+        $bloqueContenido=<<<EOF
+<h1>$cabeceraError!</h1>
+<p>$mensajeError.</p>
 EOF;
+        echo $bloqueContenido;
+      }
 
-      echo $bloqueContenido;
       return false;
     }
 
