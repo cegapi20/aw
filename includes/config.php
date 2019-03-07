@@ -5,7 +5,7 @@ define('BD_NAME', 'aw');
 define('BD_USER', 'aw');
 define('BD_PASS', 'aw');
 define('RAIZ_APP', __DIR__);
-define('RUTA_APP', '/ej3-oo/');
+define('RUTA_APP', '/estructura-proyecto/');
 define('RUTA_IMGS', RUTA_APP.'img/');
 define('RUTA_CSS', RUTA_APP.'css/');
 define('RUTA_JS', RUTA_APP.'js/');
