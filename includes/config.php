@@ -5,7 +5,7 @@ define('BD_NAME', 'aw');
 define('BD_USER', 'aw');
 define('BD_PASS', 'aw');
 define('RAIZ_APP', __DIR__);
-define('RUTA_APP', '/ej3-oo/');
+define('RUTA_APP', '/estructura-proyecto/');
 define('RUTA_IMGS', RUTA_APP.'img/');
 define('RUTA_CSS', RUTA_APP.'css/');
 define('RUTA_JS', RUTA_APP.'js/');
@@ -24,35 +24,21 @@ if (! INSTALADA) {
  * https://www.toptal.com/php/a-utf-8-primer-for-php-and-mysql
  * https://allseeing-i.com/how-to-setup-your-php-site-to-use-utf8
  * http://www.instantshift.com/2014/10/29/mbstring-and-php/
- *
+ * https://stackoverflow.com/questions/6987929/preparing-php-application-to-use-with-utf-8
+ * 
  * Una vez configurado hay que asegurarse de especificar la codificación 'UTF-8' en las funciones 
  * que tengan un parámetro charset (en PHP >= 5.6 suelen tomar el valor 'UTF-8' por defecto, 
  * pero en versiones anteriores no) y utilizar las funciones http://php.net/manual/en/book.mbstring.php.
  */
 
 /*
- * PHP >= 5.6
+ * Configuración de la codificación de la aplicación
  */
 ini_set('default_charset', 'UTF-8');
 setLocale(LC_ALL, 'es_ES.UTF.8');
 
-/*
- * PHP < 5.6
-
-// internal/script encoding.
-mb_internal_encoding('UTF-8');
-// Language for internal character representation
-mb_language('uni');
-// HTTP input encoding (requests)
-mb_http_input('UTF-8');
-
-// HTTP output encoding.
-mb_http_output('UTF-8');
-// Fuerza la codificación de la salida del script a charset especificado en http_output
-ob_start('mb_output_handler');
-mb_regex_encoding('UTF-8');
-setLocale(LC_ALL, 'es_ES.UTF.8');
-*/
+// Configuración de la zona horaria por defecto
+date_default_timezone_set('Europe/Madrid');
 
 /**
  * Función para autocargar clases PHP.

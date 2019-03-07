@@ -17,7 +17,7 @@ $app->doInclude('comun/sidebarIzq.php');
 ?>
 	<div id="contenido">
 		<h1>Acceso al sistema</h1>
-    <?php $formLogin = new \es\ucm\fdi\aw\FormularioLogin(); $formLogin->gestiona(); ?>
+    <?php $formLogin = new \es\ucm\fdi\aw\FormularioLogin(); echo $formLogin->gestiona() ?>
 	</div>
 <?php
 $app->doInclude('comun/sidebarDer.php');

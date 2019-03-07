@@ -2,9 +2,39 @@
 
 require_once __DIR__.'/includes/config.php';
 
-use \es\ucm\fdi\aw\Mensaje;
-use \es\ucm\fdi\aw\FormularioMensaje;
-use \es\ucm\fdi\aw\FormularioRespuesta;
+use es\ucm\fdi\aw\Mensaje;
+use es\ucm\fdi\aw\FormularioMensaje;
+use es\ucm\fdi\aw\FormularioRespuesta;
+use es\ucm\fdi\aw\Aplicacion;
+
+function listadoMensajes($idMensajePadre = NULL)
+{
+  $html = '<ul>';
+  $html .= listadoMensajesRecursivo($idMensajePadre);
+  $html .= '</ul>';
+  return $html;
+}
+
+function listadoMensajesRecursivo($idMensajePadre = NULL)
+{
+  $app = Aplicacion::getSingleton();
+  $html = '';
+  $mensajes = Mensaje::mensajes($idMensajePadre);
+  foreach($mensajes as $m) {
+    $html .= '<li>'.$m->texto(). ' ('.$m->username().')';
+    if ($app->tieneRol('user')) {
+      $formRespuesta = new FormularioRespuesta($m->id());
+      $html .= $formRespuesta->gestiona();
+    }
+    $html .= '</li>';
+
+    if (Mensaje::numMensajes($m->id()) > 0) {
+      $html .= listadoMensajes($m->id());
+    }
+  }
+
+  return $html;
+}
 
 ?><!DOCTYPE html>
 <html>
@@ -19,41 +49,18 @@ use \es\ucm\fdi\aw\FormularioRespuesta;
 $app->doInclude('comun/cabecera.php');
 $app->doInclude('comun/sidebarIzq.php');
 ?>
-	<div id="contenido">
+  <div id="contenido">
 <?php
 if ($app->tieneRol('user')) {
   $formMensaje = new FormularioMensaje();
-  $formMensaje->gestiona();
+  echo $formMensaje->gestiona();
 }
 ?>
-        <h1>Mensajes</h1>
-        <ul>
+    <h1>Mensajes</h1>
 <?php
-$mensajes = Mensaje::mensajes();
-foreach($mensajes as $m) {
+  echo listadoMensajes();
 ?>
-    <li><?= $m->texto()?> (<?= $m->username()?>)<?php
-    if ($app->tieneRol('user')) {
-      $formRespuesta = new FormularioRespuesta($m->id());
-      $formRespuesta->gestiona();
-    }
-    $respuestas = Mensaje::mensajes($m->id());
-    if (count($respuestas) > 0) {
-      echo '<ul>';
-
-      foreach($respuestas as $r ) {
-?>
-        <li><?= $r->texto()?> (<?= $r->username()?>)</li>
-<?php
-      }
-      echo '</ul>';
-    }
-    ?></li>
-<?php
-}
-?>
-        </ul>
-	</div>
+  </div>
 <?php
 $app->doInclude('comun/sidebarDer.php');
 $app->doInclude('comun/pie.php');

@@ -2,7 +2,8 @@
 
 namespace es\ucm\fdi\aw;
 
-class Aplicacion {
+class Aplicacion
+{
 
   private static $instancia;
 
@@ -11,18 +12,47 @@ class Aplicacion {
   private $rutaRaizApp;
 
   private $dirInstalacion;
+  
+  private $conn;
 
-  public static function getSingleton() {
+  public static function getSingleton()
+  {
       if (  !self::$instancia instanceof self) {
          self::$instancia = new self;
       }
       return self::$instancia;
   }
 
-  private function __construct() {
+  private function __construct()
+  {
+  }
+  /**
+   * Evita que se pueda utilizar el operador clone.
+   */
+  public function __clone()
+  {
+    throw new \Exception('No tiene sentido el clonado');
   }
 
-  public function init($bdDatosConexion, $rutaRaizApp, $dirInstalacion){
+    
+  /**
+   * Evita que se pueda utilizar serialize().
+   */
+  public function __sleep()
+  {
+    throw new \Exception('No tiene sentido el serializar el objeto');
+  }
+  
+  /**
+   * Evita que se pueda utilizar unserialize().
+   */
+  public function __wakeup()
+  {
+    throw new \Exception('No tiene sentido el deserializar el objeto');
+  }
+
+  public function init($bdDatosConexion, $rutaRaizApp, $dirInstalacion)
+  {
     $this->bdDatosConexion = $bdDatosConexion;
 
     $this->rutaRaizApp = $rutaRaizApp;
@@ -41,46 +71,53 @@ class Aplicacion {
     session_start();
   }
 
-  public function resuelve($path = '') {
+  public function resuelve($path = '')
+  {
     if (strlen($path) > 0 && $path[0] == '/') {
       $path = mb_substr($path, 1);
     }
     return $this->rutaRaizApp . $path;
   }
 
-  public function doInclude($path = '') {
+  public function doInclude($path = '')
+  {
     if (strlen($path) > 0 && $path[0] == '/') {
       $path = mb_substr($path, 1);
     }
     include($this->dirInstalacion . '/'.$path);
   }
 
-  public function login(Usuario $user) {
+  public function login(Usuario $user)
+  {
     $_SESSION['login'] = true;
     $_SESSION['nombre'] = $user->username();
     $_SESSION['roles'] = $user->roles();
   }
 
-  public function logout() {
+  public function logout()
+  {
     //Doble seguridad: unset + destroy
-    unset($_SESSION["login"]);
-    unset($_SESSION["nombre"]);
-    unset($_SESSION["roles"]);
+    unset($_SESSION['login']);
+    unset($_SESSION['nombre']);
+    unset($_SESSION['roles']);
 
 
     session_destroy();
     session_start();
   }
 
-  public function usuarioLogueado() {
-    return isset($_SESSION["login"]) && ($_SESSION["login"]===true);
+  public function usuarioLogueado()
+  {
+    return ($_SESSION['login'] ?? false) === true;
   }
 
-  public function nombreUsuario() {
-    return isset($_SESSION['nombre']) ? $_SESSION['nombre'] : '';
+  public function nombreUsuario()
+  {
+    return $_SESSION['nombre'] ?? '';
   }
 
-  public function conexionBd() {
+  public function conexionBd()
+  {
     if (! $this->conn ) {
       $bdHost = $this->bdDatosConexion['host'];
       $bdUser = $this->bdDatosConexion['user'];
@@ -100,8 +137,10 @@ class Aplicacion {
     return $this->conn;
   }
 
-  public function tieneRol($rol, $cabeceraError=NULL, $mensajeError=NULL) {
-    if (!isset($_SESSION['roles']) || ! in_array($rol, $_SESSION['roles'])) {
+  public function tieneRol($rol, $cabeceraError=NULL, $mensajeError=NULL)
+  {
+    $roles = $_SESSION['roles'] ?? array();
+    if (! in_array($rol, $roles)) {
       if ( !is_null($cabeceraError) && ! is_null($mensajeError) ) {
         $bloqueContenido=<<<EOF
 <h1>$cabeceraError!</h1>

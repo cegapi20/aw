@@ -2,16 +2,19 @@
 
 namespace es\ucm\fdi\aw;
 
-class FormularioRespuesta extends Form {
+class FormularioRespuesta extends Form
+{
 
   private $idMensajePadre;
 
-  public function __construct($idMensajePadre) {
+  public function __construct($idMensajePadre)
+  {
     parent::__construct('formRespuesta'.$idMensajePadre);
     $this->idMensajePadre = $idMensajePadre;
   }
   
-  protected function generaCamposFormulario ($datos) {
+  protected function generaCamposFormulario ($datos)
+  {
     $mensaje = 'Mensaje';
     if ($datos) {
       $mensaje = isset($datos['mensaje']) ? $datos['mensaje'] : $mensaje;
@@ -32,7 +35,8 @@ EOF;
   /**
    * Procesa los datos del formulario.
    */
-  protected function procesaFormulario($datos) {
+  protected function procesaFormulario($datos)
+  {
 
     $result = array();
     $ok = true;

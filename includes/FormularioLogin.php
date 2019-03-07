@@ -2,20 +2,24 @@
 
 namespace es\ucm\fdi\aw;
 
-class FormularioLogin extends Form {
+class FormularioLogin extends Form
+{
 
   const HTML5_EMAIL_REGEXP = '^[a-zA-Z0-9.!#$%&\'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$';
 
-  public function __construct() {
+  public function __construct()
+  {
     parent::__construct('formLogin');
   }
   
-  protected function generaCamposFormulario ($datos) {
+  protected function generaCamposFormulario ($datos)
+  {
     $username = 'user@example.org';
     $password = '12345';
     if ($datos) {
       $username = isset($datos['username']) ? $datos['username'] : $username;
-      $password = isset($datos['password']) ? $datos['password'] : $password;
+      /* Similar a la comparación anterior pero con el operador ?? de PHP 7 */
+      $password = $datos['password'] ?? $password;
     }
 
     $camposFormulario=<<<EOF
@@ -32,16 +36,17 @@ EOF;
   /**
    * Procesa los datos del formulario.
    */
-  protected function procesaFormulario($datos) {
+  protected function procesaFormulario($datos)
+  {
     $result = array();
     $ok = true;
-    $username = isset($datos['username']) ? $datos['username'] : null ;
+    $username = $datos['username'] ?? '' ;
     if ( !$username || ! mb_ereg_match(self::HTML5_EMAIL_REGEXP, $username) ) {
       $result[] = 'El nombre de usuario no es válido';
       $ok = false;
     }
 
-    $password = isset($datos['password']) ? $datos['password'] : null ;
+    $password = $datos['password'] ?? '' ;
     if ( ! $password ||  mb_strlen($password) < 4 ) {
       $result[] = 'La contraseña no es válida';
       $ok = false;

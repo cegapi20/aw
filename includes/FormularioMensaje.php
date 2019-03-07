@@ -2,16 +2,19 @@
 
 namespace es\ucm\fdi\aw;
 
-class FormularioMensaje extends Form {
+class FormularioMensaje extends Form
+{
 
-  public function __construct() {
+  public function __construct()
+  {
     parent::__construct('formMensaje');
   }
   
-  protected function generaCamposFormulario ($datos) {
+  protected function generaCamposFormulario ($datos)
+  {
     $mensaje = 'Mensaje';
     if ($datos) {
-      $mensaje = isset($datos['mensaje']) ? $datos['mensaje'] : $mensaje;
+      $mensaje = $datos['mensaje'] ?? $mensaje;
     }
 
     $maxSize = Mensaje::MAX_SIZE;
@@ -28,11 +31,12 @@ EOF;
   /**
    * Procesa los datos del formulario.
    */
-  protected function procesaFormulario($datos) {
+  protected function procesaFormulario($datos)
+  {
 
     $result = array();
     $ok = true;
-    $mensaje = isset($datos['mensaje']) ? $datos['mensaje'] : null ;
+    $mensaje = $datos['mensaje'] ?? '' ;
     if ( ! $mensaje ||  mb_strlen($mensaje) == 0 || mb_strlen($mensaje) > 140 ) {
       $result[] = 'La longitud del mensaje debe ser entre 1 o 140 caracteres.';
       $ok = false;
