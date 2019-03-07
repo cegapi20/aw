@@ -44,7 +44,29 @@ class Mensaje
     return $result;
   }
 
-  public static function mensaje($idMensaje) {
+  public static function numMensajes($idMensajePadre=NULL)
+  {
+    $result = 0;
+    $app = App::getSingleton();
+    $conn = $app->conexionBd();
+    $query = "SELECT COUNT(*) FROM Mensajes M, Usuarios U WHERE U.id = M.usuario";
+    if($idMensajePadre) {
+      $query = $query . ' AND M.idMensajePadre = %s';
+      $query = sprintf($query, $idMensajePadre);
+    } else {
+      $query = $query . ' AND M.idMensajePadre IS NULL';
+    }
+
+    $rs = $conn->query($query);
+    if ($rs) {
+      $result = (int) $rs->fetch_row()[0];
+      $rs->free();
+    }
+    return $result;
+  }
+
+  public static function mensaje($idMensaje)
+  {
     $result = null;
     $app = App::getSingleton();
     $conn = $app->conexionBd();
