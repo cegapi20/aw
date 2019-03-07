@@ -23,7 +23,7 @@ $app->doInclude('comun/sidebarIzq.php');
 <?php
 if ($app->tieneRol('user')) {
   $formMensaje = new FormularioMensaje();
-  $formMensaje->gestiona();
+  echo $formMensaje->gestiona();
 }
 ?>
         <h1>Mensajes</h1>
@@ -35,7 +35,7 @@ foreach($mensajes as $m) {
     <li><?= $m->texto()?> (<?= $m->username()?>)<?php
     if ($app->tieneRol('user')) {
       $formRespuesta = new FormularioRespuesta($m->id());
-      $formRespuesta->gestiona();
+      echo $formRespuesta->gestiona();
     }
     $respuestas = Mensaje::mensajes($m->id());
     if (count($respuestas) > 0) {

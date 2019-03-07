@@ -69,31 +69,31 @@ class Form
   {
     
     if ( ! $this->formularioEnviado($_POST) ) {
-      echo $this->generaFormulario();
+      return $this->generaFormulario();
     } else {
       // Valida el token CSRF si es necesario (hay un token en la sesión asociada al formulario)
-      $tokenRecibido = isset($_POST['CSRFToken']) ? $_POST['CSRFToken'] : FALSE;
+      $tokenRecibido = $_POST['CSRFToken'] ?? FALSE;
       
       if ( ($errores = $this->csrfguard_ValidateToken($this->formId, $tokenRecibido)) !== TRUE ) { 
           if ( ! $this->ajax ) {
-            echo $this->generaFormulario($errores, $_POST);
+            return $this->generaFormulario($errores, $_POST);
           } else {
-            echo $this->generaHtmlErrores($errores);
+            return $this->generaHtmlErrores($errores);
           }
       } else  {
         $result = $this->procesaFormulario($_POST);
         if ( is_array($result) ) {
           // Error al procesar el formulario, volvemos a mostrarlo
           if ( ! $this->ajax ) {
-            echo $this->generaFormulario($result, $_POST);
+            return $this->generaFormulario($result, $_POST);
           } else {
-            echo $this->generaHtmlErrores($result);
+            return $this->generaHtmlErrores($result);
           }
         } else {
           if ( ! $this->ajax ) {
             header('Location: '.$result);
           } else {
-            echo $result;
+            return $result;
           }
         }
       }
