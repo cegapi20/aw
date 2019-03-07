@@ -24,6 +24,29 @@ class Aplicacion
   private function __construct()
   {
   }
+  /**
+   * Evita que se pueda utilizar el operador clone.
+   */
+  public function __clone()
+  {
+    throw new \Exception('No tiene sentido el clonado');
+  }
+
+    
+  /**
+   * Evita que se pueda utilizar serialize().
+   */
+  public function __sleep()
+  {
+    throw new \Exception('No tiene sentido el serializar el objeto');
+  }
+  
+  /**
+   * Evita que se pueda utilizar unserialize().
+   */
+  public function __wakeup()
+  {
+    throw new \Exception('No tiene sentido el deserializar el objeto');
   }
 
   public function init($bdDatosConexion, $rutaRaizApp, $dirInstalacion)
