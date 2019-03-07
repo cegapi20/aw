@@ -61,7 +61,7 @@ class Form
     $this->enctype  = $opciones['enctype'];
     
     if ( !$this->action ) {
-      $this->action = $_SERVER['PHP_SELF'];
+      $this->action = htmlspecialchars($_SERVER['REQUEST_URI']);
     }
   }
   
