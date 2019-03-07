@@ -2,7 +2,8 @@
 
 namespace es\ucm\fdi\aw;
 
-class Aplicacion {
+class Aplicacion
+{
 
   private static $instancia;
 
@@ -12,17 +13,21 @@ class Aplicacion {
 
   private $dirInstalacion;
 
-  public static function getSingleton() {
+  public static function getSingleton()
+  {
       if (  !self::$instancia instanceof self) {
          self::$instancia = new self;
       }
       return self::$instancia;
   }
 
-  private function __construct() {
+  private function __construct()
+  {
+  }
   }
 
-  public function init($bdDatosConexion, $rutaRaizApp, $dirInstalacion){
+  public function init($bdDatosConexion, $rutaRaizApp, $dirInstalacion)
+  {
     $this->bdDatosConexion = $bdDatosConexion;
 
     $this->rutaRaizApp = $rutaRaizApp;
@@ -41,31 +46,35 @@ class Aplicacion {
     session_start();
   }
 
-  public function resuelve($path = '') {
+  public function resuelve($path = '')
+  {
     if (strlen($path) > 0 && $path[0] == '/') {
       $path = mb_substr($path, 1);
     }
     return $this->rutaRaizApp . $path;
   }
 
-  public function doInclude($path = '') {
+  public function doInclude($path = '')
+  {
     if (strlen($path) > 0 && $path[0] == '/') {
       $path = mb_substr($path, 1);
     }
     include($this->dirInstalacion . '/'.$path);
   }
 
-  public function login(Usuario $user) {
+  public function login(Usuario $user)
+  {
     $_SESSION['login'] = true;
     $_SESSION['nombre'] = $user->username();
     $_SESSION['roles'] = $user->roles();
   }
 
-  public function logout() {
+  public function logout()
+  {
     //Doble seguridad: unset + destroy
-    unset($_SESSION["login"]);
-    unset($_SESSION["nombre"]);
-    unset($_SESSION["roles"]);
+    unset($_SESSION['login']);
+    unset($_SESSION['nombre']);
+    unset($_SESSION['roles']);
 
 
     session_destroy();
@@ -80,7 +89,8 @@ class Aplicacion {
     return isset($_SESSION['nombre']) ? $_SESSION['nombre'] : '';
   }
 
-  public function conexionBd() {
+  public function conexionBd()
+  {
     if (! $this->conn ) {
       $bdHost = $this->bdDatosConexion['host'];
       $bdUser = $this->bdDatosConexion['user'];

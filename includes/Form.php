@@ -7,7 +7,8 @@ namespace es\ucm\fdi\aw;
  *
  * Gestión de token CSRF está basada en: https://www.owasp.org/index.php/PHP_CSRF_Guard
  */
-class Form {
+class Form
+{
 
   /**
    * Sufijo para el nombre del parámetro de la sesión del usuario donde se almacena el token CSRF.
@@ -47,7 +48,8 @@ class Form {
    *
    * @param string enctype (opcional) Valor del parámetro enctype del formulario.
    */
-  public function __construct($formId, $opciones = array() ) {
+  public function __construct($formId, $opciones = array() )
+  {
     $this->formId = $formId;
 
     $opcionesPorDefecto = array( 'ajax' => false, 'action' => null, 'class' => null, 'enctype' => null );
@@ -63,7 +65,8 @@ class Form {
     }
   }
   
-  public function gestiona() {
+  public function gestiona()
+  {
     
     if ( ! $this->formularioEnviado($_POST) ) {
       echo $this->generaFormulario();
@@ -100,14 +103,16 @@ class Form {
   /**
    * Devuelve un <code>string</code> con el HTML necesario para presentar los campos del formulario. Es necesario asegurarse que como parte del envío se envía un parámetro con nombre <code$formId</code> (i.e. utilizado como valor del atributo name del botón de envío del formulario).
    */
-  protected function generaCamposFormulario ($datos) {
+  protected function generaCamposFormulario ($datos)
+  {
     return '';
   }
 
   /**
    * Procesa los datos del formulario.
    */
-  protected function procesaFormulario($datos) {
+  protected function procesaFormulario($datos)
+  {
 
   }
 
@@ -130,7 +135,8 @@ class Form {
    *
    * @param array $datos (opcional) Array con los valores por defecto de los campos del formulario.
    */
-  private function generaFormulario($errores = array(), &$datos = array()) {
+  private function generaFormulario($errores = array(), &$datos = array())
+  {
 
     $html= $this->generaListaErrores($errores);
 
@@ -156,7 +162,8 @@ class Form {
     return $html;
   }
 
-  private function generaListaErrores($errores) {
+  private function generaListaErrores($errores)
+  {
     $html='';
     $numErrores = count($errores);
     if (  $numErrores == 1 ) {
@@ -169,32 +176,34 @@ class Form {
     return $html;
   }
 
-  private function csrfguard_GenerateToken($formId) {
+  private function csrfguard_GenerateToken($formId)
+  {
     if ( ! isset($_SESSION) ) {
       throw new Exception('La sesión del usuario no está definida.');
     }
     
-	  if ( function_exists('hash_algos') && in_array('sha512', hash_algos()) ) {
-		  $token = hash('sha512', mt_rand(0, mt_getrandmax()));
-	  }	else {
-		  $token=' ';
-		  for ($i=0;$i<128;++$i) {
-			  $r=mt_rand(0,35);
-			  if ($r<26){
-				  $c=chr(ord('a')+$r);
-			  }	else{ 
-				  $c=chr(ord('0')+$r-26);
-			  } 
-			  $token.=$c;
-		  }
-	  }
+    if ( function_exists('hash_algos') && in_array('sha512', hash_algos()) ) {
+      $token = hash('sha512', mt_rand(0, mt_getrandmax()));
+    } else {
+      $token=' ';
+      for ($i=0;$i<128;++$i) {
+        $r=mt_rand(0,35);
+        if ($r<26){
+          $c=chr(ord('a')+$r);
+        } else{ 
+          $c=chr(ord('0')+$r-26);
+        } 
+        $token.=$c;
+      }
+    }
 
     $_SESSION[$formId.'_'.self::CSRF_PARAM]=$token;
 
-	  return $token;
+    return $token;
   }
 
-  private function csrfguard_ValidateToken($formId, $tokenRecibido) {
+  private function csrfguard_ValidateToken($formId, $tokenRecibido)
+  {
     if ( ! isset($_SESSION) ) {
       throw new Exception('La sesión del usuario no está definida.');
     }
@@ -212,7 +221,6 @@ class Form {
       $result = array();
       $result[] = 'Formulario no válido';
     }
-	  return $result;
+      return $result;
   }
 }
-?>

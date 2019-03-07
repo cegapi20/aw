@@ -2,15 +2,18 @@
 
 namespace es\ucm\fdi\aw;
 
-class FormularioLogin extends Form {
+class FormularioLogin extends Form
+{
 
   const HTML5_EMAIL_REGEXP = '^[a-zA-Z0-9.!#$%&\'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$';
 
-  public function __construct() {
+  public function __construct()
+  {
     parent::__construct('formLogin');
   }
   
-  protected function generaCamposFormulario ($datos) {
+  protected function generaCamposFormulario ($datos)
+  {
     $username = 'user@example.org';
     $password = '12345';
     if ($datos) {
@@ -32,7 +35,8 @@ EOF;
   /**
    * Procesa los datos del formulario.
    */
-  protected function procesaFormulario($datos) {
+  protected function procesaFormulario($datos)
+  {
     $result = array();
     $ok = true;
     $username = isset($datos['username']) ? $datos['username'] : null ;

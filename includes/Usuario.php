@@ -4,9 +4,11 @@ namespace es\ucm\fdi\aw;
 
 use es\ucm\fdi\aw\Aplicacion as App;
 
-class Usuario {
+class Usuario
+{
 
-  public static function login($username, $password) {
+  public static function login($username, $password)
+  {
     $user = self::buscaUsuario($username);
     if ($user && $user->compruebaPassword($password)) {
       $app = App::getSingleton();
@@ -24,7 +26,8 @@ class Usuario {
     return false;
   }
 
-  public static function buscaUsuario($username) {
+  public static function buscaUsuario($username)
+  {
     $app = App::getSingleton();
     $conn = $app->conexionBd();
     $query = sprintf("SELECT * FROM Usuarios WHERE username='%s'", $conn->real_escape_string($username));
@@ -47,34 +50,41 @@ class Usuario {
 
   private $roles;
 
-  private function __construct($id, $username, $password) {
+  private function __construct($id, $username, $password)
+  {
     $this->id = $id;
     $this->username = $username;
     $this->password = $password;
     $this->roles = [];
   }
 
-  public function id() {
+  public function id()
+  {
     return $this->id;
   }
 
-  public function addRol($role) {
+  public function addRol($role)
+  {
     $this->roles[] = $role;
   }
 
-  public function roles() {
+  public function roles()
+  {
     return $this->roles;
   }
 
-  public function username() {
+  public function username()
+  {
     return $this->username;
   }
 
-  public function compruebaPassword($password) {
+  public function compruebaPassword($password)
+  {
     return password_verify($password, $this->password);
   }
 
-  public function cambiaPassword($nuevoPassword) {
+  public function cambiaPassword($nuevoPassword)
+  {
     $this->password = password_hash($nuevoPassword, PASSWORD_DEFAULT);
   }
 }
