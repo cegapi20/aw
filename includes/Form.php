@@ -123,8 +123,9 @@ class Form
    *
    * @return boolean Devuelve <code>TRUE</code> si <code>$formId</code> existe como clave en <code>$params</code>
    */
-  private function formularioEnviado(&$params) {
-    return isset($params['action']) && $params['action'] == $this->formId;
+  private function formularioEnviado(&$params)
+  {
+    return ($params['action'] ?? '') == $this->formId;
   } 
 
   /**

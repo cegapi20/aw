@@ -14,7 +14,7 @@ class FormularioMensaje extends Form
   {
     $mensaje = 'Mensaje';
     if ($datos) {
-      $mensaje = isset($datos['mensaje']) ? $datos['mensaje'] : $mensaje;
+      $mensaje = $datos['mensaje'] ?? $mensaje;
     }
 
     $maxSize = Mensaje::MAX_SIZE;
@@ -36,7 +36,7 @@ EOF;
 
     $result = array();
     $ok = true;
-    $mensaje = isset($datos['mensaje']) ? $datos['mensaje'] : null ;
+    $mensaje = $datos['mensaje'] ?? '' ;
     if ( ! $mensaje ||  mb_strlen($mensaje) == 0 || mb_strlen($mensaje) > 140 ) {
       $result[] = 'La longitud del mensaje debe ser entre 1 o 140 caracteres.';
       $ok = false;

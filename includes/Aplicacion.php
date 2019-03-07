@@ -12,6 +12,8 @@ class Aplicacion
   private $rutaRaizApp;
 
   private $dirInstalacion;
+  
+  private $conn;
 
   public static function getSingleton()
   {
@@ -104,12 +106,14 @@ class Aplicacion
     session_start();
   }
 
-  public function usuarioLogueado() {
-    return isset($_SESSION["login"]) && ($_SESSION["login"]===true);
+  public function usuarioLogueado()
+  {
+    return ($_SESSION['login'] ?? false) === true;
   }
 
-  public function nombreUsuario() {
-    return isset($_SESSION['nombre']) ? $_SESSION['nombre'] : '';
+  public function nombreUsuario()
+  {
+    return $_SESSION['nombre'] ?? '';
   }
 
   public function conexionBd()
@@ -133,8 +137,10 @@ class Aplicacion
     return $this->conn;
   }
 
-  public function tieneRol($rol, $cabeceraError=NULL, $mensajeError=NULL) {
-    if (!isset($_SESSION['roles']) || ! in_array($rol, $_SESSION['roles'])) {
+  public function tieneRol($rol, $cabeceraError=NULL, $mensajeError=NULL)
+  {
+    $roles = $_SESSION['roles'] ?? array();
+    if (! in_array($rol, $roles)) {
       if ( !is_null($cabeceraError) && ! is_null($mensajeError) ) {
         $bloqueContenido=<<<EOF
 <h1>$cabeceraError!</h1>

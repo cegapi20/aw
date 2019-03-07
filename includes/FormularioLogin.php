@@ -18,7 +18,8 @@ class FormularioLogin extends Form
     $password = '12345';
     if ($datos) {
       $username = isset($datos['username']) ? $datos['username'] : $username;
-      $password = isset($datos['password']) ? $datos['password'] : $password;
+      /* Similar a la comparación anterior pero con el operador ?? de PHP 7 */
+      $password = $datos['password'] ?? $password;
     }
 
     $camposFormulario=<<<EOF
@@ -39,13 +40,13 @@ EOF;
   {
     $result = array();
     $ok = true;
-    $username = isset($datos['username']) ? $datos['username'] : null ;
+    $username = $datos['username'] ?? '' ;
     if ( !$username || ! mb_ereg_match(self::HTML5_EMAIL_REGEXP, $username) ) {
       $result[] = 'El nombre de usuario no es válido';
       $ok = false;
     }
 
-    $password = isset($datos['password']) ? $datos['password'] : null ;
+    $password = $datos['password'] ?? '' ;
     if ( ! $password ||  mb_strlen($password) < 4 ) {
       $result[] = 'La contraseña no es válida';
       $ok = false;
