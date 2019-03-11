@@ -4,40 +4,33 @@ define('BD_HOST', 'localhost');
 define('BD_NAME', 'aw');
 define('BD_USER', 'aw');
 define('BD_PASS', 'aw');
+
+/*
+ * Parámetros de configuración utilizados para generar las URLs y las rutas a ficheros en la aplicación
+ */
 define('RAIZ_APP', __DIR__);
-define('RUTA_APP', '/estructura-proyecto/');
-define('RUTA_IMGS', RUTA_APP.'img/');
-define('RUTA_CSS', RUTA_APP.'css/');
-define('RUTA_JS', RUTA_APP.'js/');
+define('RUTA_APP', '/estructura-proyecto');
+
 define('INSTALADA', true );
 
 if (! INSTALADA) {
-  echo "La aplicación no está configurada";
+  http_response_code(500);
+  $tituloPagina = 'Error';
+
+  $contenidoPagina = <<<EOS
+  <h1>Oops</h1>
+  <p>La aplicación no está configurada.</p>
+  EOS;
+
+  require __DIR__.'/plantillas/plantilla.php';
   exit();
 }
 
-/* */
-/* Configuración del charset */
-/* */
-
-/* Enlaces de interés para el soporte de UTF-8:
- * https://www.toptal.com/php/a-utf-8-primer-for-php-and-mysql
- * https://allseeing-i.com/how-to-setup-your-php-site-to-use-utf8
- * http://www.instantshift.com/2014/10/29/mbstring-and-php/
- * https://stackoverflow.com/questions/6987929/preparing-php-application-to-use-with-utf-8
- * 
- * Una vez configurado hay que asegurarse de especificar la codificación 'UTF-8' en las funciones 
- * que tengan un parámetro charset (en PHP >= 5.6 suelen tomar el valor 'UTF-8' por defecto, 
- * pero en versiones anteriores no) y utilizar las funciones http://php.net/manual/en/book.mbstring.php.
- */
-
-/*
- * Configuración de la codificación de la aplicación
+/**
+ * Configuración del soporte de UTF-8, localización (idioma y país) y zona horaria
  */
 ini_set('default_charset', 'UTF-8');
 setLocale(LC_ALL, 'es_ES.UTF.8');
-
-// Configuración de la zona horaria por defecto
 date_default_timezone_set('Europe/Madrid');
 
 /**
@@ -78,3 +71,9 @@ spl_autoload_register(function ($class) {
 /* */
 $app = \es\ucm\fdi\aw\Aplicacion::getSingleton();
 $app->init(array('host'=>BD_HOST, 'bd'=>BD_NAME, 'user'=>BD_USER, 'pass'=>BD_PASS), RUTA_APP, RAIZ_APP);
+
+/**
+ * @see http://php.net/manual/en/function.register-shutdown-function.php
+ * @see http://php.net/manual/en/language.types.callable.php
+ */
+register_shutdown_function(array($app, 'shutdown'));

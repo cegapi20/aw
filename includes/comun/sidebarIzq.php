@@ -1,10 +1,9 @@
 <?php
-use es\ucm\fdi\aw;
+use es\ucm\fdi\aw\Aplicacion;
 
-$app = aw\Aplicacion::getSingleton();
+$app = Aplicacion::getSingleton();
 ?>
-
-<div id="sidebar-left">
+<nav id="sidebarIzq">
 	<h3>Navegación</h3>
 	<ul>
 		<li><a href="<?= $app->resuelve('/index.php')?>">Inicio</a></li>
@@ -12,4 +11,4 @@ $app = aw\Aplicacion::getSingleton();
 		<li><a href="<?= $app->resuelve('/admin.php')?>">Administrar</a></li>
 		<li><a href="<?= $app->resuelve('/mensajes.php')?>">Mensajes</a></li>
 	</ul>
-</div>
+</nav>

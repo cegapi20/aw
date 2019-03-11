@@ -1,3 +1,3 @@
-	<div id="sidebar-right">
-		Texto del sidebar derecho.
-	</div>
+<aside id="sidebarDer">
+	Texto del sidebar derecho.
+</aside>

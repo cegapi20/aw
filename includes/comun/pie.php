@@ -1,3 +1,3 @@
-<div id="pie">
+<footer>
 	Pie de página
-</div>
+</footer>

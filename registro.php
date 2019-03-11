@@ -2,14 +2,14 @@
 
 require_once __DIR__.'/includes/config.php';
 
-$formLogin = new \es\ucm\fdi\aw\usuarios\FormularioLogin();
-$formLogin = $formLogin->gestiona();
+$formRegistro = new \es\ucm\fdi\aw\usuarios\FormularioRegistro();
+$formRegistro = $formRegistro->gestiona();
 
 
-$tituloPagina = 'Login';
+$tituloPagina = 'Registro';
 $contenidoPagina=<<<EOF
-  	<h1>Acceso al sistema</h1>
-    $formLogin
+  	<h1>Registro de usuario</h1>
+    $formRegistro
 EOF;
 
 $params = ['tituloPagina' => $tituloPagina, 'contenidoPagina' => $contenidoPagina];

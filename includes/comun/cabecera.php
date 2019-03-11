@@ -1,26 +1,31 @@
 <?php
-use es\ucm\fdi\aw;
+use es\ucm\fdi\aw\Aplicacion;
+use es\ucm\fdi\aw\usuarios\FormularioLogout;
 
 function mostrarSaludo() {
   $html = '';
-  $app = aw\Aplicacion::getSingleton();
+  $app = Aplicacion::getSingleton();
   if ($app->usuarioLogueado()) {
     $nombreUsuario = $app->nombreUsuario();
-    $logoutUrl = $app->resuelve('/logout.php');
-    $html = "Bienvenido, ${nombreUsuario}.<a href='${logoutUrl}'>(salir)</a>";
+
+    $formLogout = new FormularioLogout();
+    $htmlLogout = $formLogout->gestiona();
+    $html = "Bienvenido, ${nombreUsuario}. $htmlLogout";
   } else {
     $loginUrl = $app->resuelve('/login.php');
-    $html = "Usuario desconocido. <a href='${loginUrl}'>Login</a>";
+    $registroUrl = $app->resuelve('/registro.php');
+    $html = <<<EOS
+      Usuario desconocido. <a href="{$loginUrl}">Login</a> <a href="{$registroUrl}">Registro</a>
+    EOS;
   }
 
   return $html;
 }
 
 ?>
-<div id="cabecera">
+<header>
 	<h1>Mi gran página web</h1>
 	<div class="saludo">
 	  <?=	mostrarSaludo() ?>
 	</div>
-</div>
-
+</header>

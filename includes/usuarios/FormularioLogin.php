@@ -1,6 +1,8 @@
 <?php
+namespace es\ucm\fdi\aw\usuarios;
 
-namespace es\ucm\fdi\aw;
+use es\ucm\fdi\aw\Aplicacion;
+use es\ucm\fdi\aw\Form;
 
 class FormularioLogin extends Form
 {
@@ -12,24 +14,30 @@ class FormularioLogin extends Form
     parent::__construct('formLogin');
   }
   
-  protected function generaCamposFormulario ($datos)
+  protected function generaCamposFormulario ($datos, $errores = array())
   {
     $username = 'user@example.org';
-    $password = '12345';
+    $password = 'userpass';
     if ($datos) {
       $username = isset($datos['username']) ? $datos['username'] : $username;
       /* Similar a la comparación anterior pero con el operador ?? de PHP 7 */
       $password = $datos['password'] ?? $password;
     }
 
-    $camposFormulario=<<<EOF
-		<fieldset>
-		  <legend>Usuario y contraseña</legend>
-		  <p><label>Name:</label> <input type="text" name="username" value="$username"/></p>
-		  <p><label>Password:</label> <input type="password" name="password" value="$password"/><br /></p>
-		  <button type="submit">Entrar</button>
-		</fieldset>
-EOF;
+    // Se generan los mensajes de error si existen.
+    $htmlErroresGlobales = self::generaListaErroresGlobales($errores);
+    $errorUsername = self::createMensajeError($errores, 'username', 'span', array('class' => 'error'));
+    $errorPassword = self::createMensajeError($errores, 'password', 'span', array('class' => 'error'));
+
+    $camposFormulario=<<<EOS
+    <fieldset>
+      <legend>Usuario y contraseña</legend>
+      $htmlErroresGlobales
+      <p><label>Name:</label> <input type="email" name="username" value="$username"/>$errorUsername</p>
+      <p><label>Password:</label> <input type="password" name="password" value="$password"/>$errorPassword</p>
+      <button type="submit">Entrar</button>
+    </fieldset>
+    EOS;
     return $camposFormulario;
   }
 
@@ -40,15 +48,16 @@ EOF;
   {
     $result = array();
     $ok = true;
+
     $username = $datos['username'] ?? '' ;
     if ( !$username || ! mb_ereg_match(self::HTML5_EMAIL_REGEXP, $username) ) {
-      $result[] = 'El nombre de usuario no es válido';
+      $result['username'] = 'El nombre de usuario no es válido';
       $ok = false;
     }
 
     $password = $datos['password'] ?? '' ;
     if ( ! $password ||  mb_strlen($password) < 4 ) {
-      $result[] = 'La contraseña no es válida';
+      $result['password'] = 'La contraseña no es válida';
       $ok = false;
     }
 
@@ -57,8 +66,9 @@ EOF;
       if ( $user ) {
         // SEGURIDAD: Forzamos que se genere una nueva cookie de sesión por si la han capturado antes de hacer login
         session_regenerate_id(true);
-        Aplicacion::getSingleton()->login($user);
-        $result = \es\ucm\fdi\aw\Aplicacion::getSingleton()->resuelve('/index.php');
+        $app =  Aplicacion::getSingleton();
+        $app->login($user);
+        $result = $app->resuelve('/index.php');
       }else {
         $result[] = 'El usuario o la contraseña es incorrecta';
       }
