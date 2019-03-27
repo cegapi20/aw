@@ -61,7 +61,9 @@ class Form
     $this->enctype  = $opciones['enctype'];
     
     if ( !$this->action ) {
+      $app = Aplicacion::getSingleton();
       $this->action = htmlspecialchars($_SERVER['REQUEST_URI']);
+      $this->action = $app->resuelve($this->action);
     }
   }
   
