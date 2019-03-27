@@ -110,11 +110,11 @@ class Mensaje
 
   private function __construct($username, $usuario, $mensaje, $idMensajePadre, $id = NULL)
   {
-    $this->id = (int)$id;
+    $this->id = $id;
     $this->usuario = $usuario;
     $this->username = $username;
     $this->mensaje = $mensaje;
-    $this->idMensajePadre = (int)$idMensajePadre;
+    $this->idMensajePadre = $idMensajePadre;
   }
 
   public function id()
