@@ -73,7 +73,12 @@ class Aplicacion
 
   public function resuelve($path = '')
   {
-    if (strlen($path) > 0 && $path[0] == '/') {
+    $rutaRaizAppLongitudPrefijo = mb_strlen($this->rutaRaizApp);
+    if( mb_substr($path, 0, $rutaRaizAppLongitudPrefijo) === $this->rutaRaizApp ) {
+      return $path;
+    }
+
+    if (mb_strlen($path) > 0 && $path[0] == '/') {
       $path = mb_substr($path, 1);
     }
     return $this->rutaRaizApp . $path;
@@ -81,7 +86,7 @@ class Aplicacion
 
   public function doInclude($path = '')
   {
-    if (strlen($path) > 0 && $path[0] == '/') {
+    if (mb_strlen($path) > 0 && $path[0] == '/') {
       $path = mb_substr($path, 1);
     }
     include($this->dirInstalacion . '/'.$path);
