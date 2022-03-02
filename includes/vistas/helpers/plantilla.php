@@ -4,7 +4,7 @@ use es\ucm\fdi\aw\Aplicacion;
 
 function mensajesPeticionAnterior()
 {
-    $app = Aplicacion::getSingleton();
+    $app = Aplicacion::getInstance();
     $mensajes = $app->getAtributoPeticion('mensajes');
     $html = '';
     if ($mensajes) {

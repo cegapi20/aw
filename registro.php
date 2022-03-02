@@ -7,10 +7,10 @@ $formRegistro = $formRegistro->gestiona();
 
 
 $tituloPagina = 'Registro';
-$contenidoPagina=<<<EOF
+$contenidoPrincipal=<<<EOF
   	<h1>Registro de usuario</h1>
     $formRegistro
 EOF;
 
-$params = ['tituloPagina' => $tituloPagina, 'contenidoPagina' => $contenidoPagina];
+$params = ['tituloPagina' => $tituloPagina, 'contenidoPrincipal' => $contenidoPrincipal];
 $app->generaVista('/plantillas/plantilla.php', $params);

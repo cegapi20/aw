@@ -1,30 +1,21 @@
 <?php
-// Varios defines para los parámetros de configuración de acceso a la BD y la URL desde la que se sirve la aplicación
+
+/**
+ * Parámetros de conexión a la BD
+ */
 define('BD_HOST', 'localhost');
 define('BD_NAME', 'aw');
 define('BD_USER', 'aw');
 define('BD_PASS', 'aw');
 
-/*
+/**
  * Parámetros de configuración utilizados para generar las URLs y las rutas a ficheros en la aplicación
  */
 define('RAIZ_APP', __DIR__);
 define('RUTA_APP', '/estructura-proyecto');
-
-define('INSTALADA', true );
-
-if (! INSTALADA) {
-  http_response_code(500);
-  $tituloPagina = 'Error';
-
-  $contenidoPagina = <<<EOS
-  <h1>Oops</h1>
-  <p>La aplicación no está configurada.</p>
-  EOS;
-
-  require __DIR__.'/plantillas/plantilla.php';
-  exit();
-}
+define('RUTA_IMGS', RUTA_APP.'img/');
+define('RUTA_CSS', RUTA_APP.'css/');
+define('RUTA_JS', RUTA_APP.'js/');
 
 /**
  * Configuración del soporte de UTF-8, localización (idioma y país) y zona horaria
@@ -44,7 +35,7 @@ spl_autoload_register(function ($class) {
     $prefix = 'es\\ucm\\fdi\\aw\\';
 
     // base directory for the namespace prefix
-    $base_dir = __DIR__ . '/';
+    $base_dir = implode(DIRECTORY_SEPARATOR, [__DIR__, 'src', '']);
 
     // does the class use the namespace prefix?
     $len = strlen($prefix);
@@ -67,10 +58,17 @@ spl_autoload_register(function ($class) {
 });
 
 /* */
-/* Inicialización del objeto aplicacion */
+/* Inicialización de la aplicación */
 /* */
-$app = \es\ucm\fdi\aw\Aplicacion::getSingleton();
+
+define('INSTALADA', false);
+
+$app = \es\ucm\fdi\aw\Aplicacion::getInstance();
 $app->init(array('host'=>BD_HOST, 'bd'=>BD_NAME, 'user'=>BD_USER, 'pass'=>BD_PASS), RUTA_APP, RAIZ_APP);
+
+if (! INSTALADA) {
+	$app->paginaError(502, 'Error', 'Oops', 'La aplicación no está configurada. Tienes que modificar el fichero config.php');
+}
 
 /**
  * @see http://php.net/manual/en/function.register-shutdown-function.php
