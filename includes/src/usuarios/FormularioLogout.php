@@ -8,7 +8,9 @@ use es\ucm\fdi\aw\Formulario;
 class FormularioLogout extends Formulario
 {
     public function __construct() {
-        parent::__construct('formLogout', ['urlRedireccion' => Aplicacion::getInstance()->resuelve('/index.php')]);
+        parent::__construct('formLogout', [
+            'action' =>  Aplicacion::getInstance()->resuelve('/logout.php'),
+            'urlRedireccion' => Aplicacion::getInstance()->resuelve('/index.php')]);
     }
 
     protected function generaCamposFormulario(&$datos)
