@@ -31,8 +31,5 @@ class FormularioLogout extends Formulario
         $app->logout();
         $mensajes = ['Hasta pronto !'];
         $app->putAtributoPeticion('mensajes', $mensajes);
-        $result = $app->resuelve('/index.php');
-
-        return $result;
     }
 }

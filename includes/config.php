@@ -75,3 +75,6 @@ if (! INSTALADA) {
  * @see http://php.net/manual/en/language.types.callable.php
  */
 register_shutdown_function(array($app, 'shutdown'));
+
+// Incluimos funciones de utiliría básicas que se utilizan en la mayoría de páginas
+require_once __DIR__ . '/vistas/helpers/utils.php';
