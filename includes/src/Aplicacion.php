@@ -37,7 +37,7 @@ class Aplicacion
      *             la aplicación está accesible en http://localhost/miApp/, este
      *             parámetro debería de tomar el valor "/miApp".
      */
-    private $rutaApp;
+    private $rutaRaizApp;
 
     /**
      * @var string Ruta absoluta al directorio "includes" de la aplicación.
@@ -72,7 +72,7 @@ class Aplicacion
     private function __construct()
     {
         $this->inicializada = false;
-        $this->generandoErro = false;
+        $this->generandoError = false;
     }
 
     /**
@@ -300,7 +300,7 @@ class Aplicacion
 
     public function paginaError($codigoRespuesta, $tituloPagina, $mensajeError, $explicacion = '')
     {
-        $this->generandoPaginaError = true;
+        $this->generandoError = true;
         http_response_code($codigoRespuesta);
 
         $params = ['tituloPagina' => $tituloPagina, 'contenidoPrincipal' => "<h1>{$mensajeError}</h1><p>{$explicacion}</p>"];
