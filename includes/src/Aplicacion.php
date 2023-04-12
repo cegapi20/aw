@@ -216,10 +216,9 @@ class Aplicacion
         return $this->rutaRaizApp . $path;
     }
 
-    public function doInclude($path = '')
+    public function doInclude($path = '', &$params= [])
     {
         $this->compruebaInstanciaInicializada();
-        $params = array();
         $this->doIncludeInterna($path, $params);
     }
 
