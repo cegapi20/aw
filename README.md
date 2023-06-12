@@ -18,3 +18,16 @@ DocumentRoot) no tienes que hacer nada más. *Si colocas el proyecto en otras ca
 ```RUTA_APP``` para que apunte a la URL donde está colgada la aplicación. Por ejemplo si la URL con la que accedes a la
 aplicación es ```http://localhost/ejemplos/estructura-proyecto/``` la constante debe tomar el valor
 ```define('RUTA_APP', '/ejemplos/estructura-proyecto/');```
+
+Si lo descargamos desde el repo del profe 
+git remote remove origin
+
+git remote add origin https://github.com/cegapi20/aw-examen.git4
+
+git branch -M main
+
+git push -u origin main
+
+git config user.name "Antonio"
+git config credential.username "cegapi20"  
+

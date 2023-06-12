@@ -5,8 +5,8 @@
  */
 define('BD_HOST', 'localhost');
 define('BD_NAME', 'aw');
-define('BD_USER', 'aw');
-define('BD_PASS', 'aw');
+define('BD_USER', 'root');
+define('BD_PASS', '');
 
 /**
  * Parámetros de configuración utilizados para generar las URLs y las rutas a ficheros en la aplicación
@@ -61,7 +61,7 @@ spl_autoload_register(function ($class) {
 /* Inicialización de la aplicación */
 /* */
 
-define('INSTALADA', false);
+define('INSTALADA', true);
 
 $app = \es\ucm\fdi\aw\Aplicacion::getInstance();
 $app->init(array('host'=>BD_HOST, 'bd'=>BD_NAME, 'user'=>BD_USER, 'pass'=>BD_PASS), RUTA_APP, RAIZ_APP);
