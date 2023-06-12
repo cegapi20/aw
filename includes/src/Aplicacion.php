@@ -251,6 +251,7 @@ class Aplicacion
         $_SESSION['nombre'] = $user->getNombre();
         $_SESSION['idUsuario'] = $user->getId();
         $_SESSION['roles'] = $user->getRoles();
+        $_SESSION['avatar'] = $user->getAvatar();
     }
 
     public function logout()
@@ -261,6 +262,7 @@ class Aplicacion
         unset($_SESSION['nombre']);
         unset($_SESSION['idUsuario']);
         unset($_SESSION['roles']);
+        unset($_SESSION['avatar']);
 
 
         session_destroy();
@@ -279,6 +281,12 @@ class Aplicacion
         return $_SESSION['nombre'] ?? '';
     }
 
+    public function avatarUsuario()
+    {
+        $this->compruebaInstanciaInicializada();
+        return $_SESSION['avatar'] ?? 'img/avatar_generic.png';
+    }
+    
     public function idUsuario()
     {
         $this->compruebaInstanciaInicializada();
@@ -382,5 +390,10 @@ class Aplicacion
             }
         }
         return $query;
+    }
+
+    public function test(){
+
+        return "img/avatar_generic.png";
     }
 }

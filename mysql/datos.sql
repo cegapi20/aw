@@ -25,8 +25,8 @@ INSERT INTO `RolesUsuario` (`usuario`, `rol`) VALUES
   user: userpass
   admin: adminpass
 */
-INSERT INTO `Usuarios` (`id`, `nombreUsuario`, `nombre`, `password`,`tratamiento_id`) VALUES
-(1, 'admin', 'Administrador', '$2y$10$O3c1kBFa2yDK5F47IUqusOJmIANjHP6EiPyke5dD18ldJEow.e0eS',2),
-(2, 'user', 'Usuario', '$2y$10$uM6NtF.f6e.1Ffu2rMWYV.j.X8lhWq9l8PwJcs9/ioVKTGqink6DG',1),
-(3, 'antonio', 'antoniogp', '$2y$10$uM6NtF.f6e.1Ffu2rMWYV.j.X8lhWq9l8PwJcs9/ioVKTGqink6DG',1);
+INSERT INTO `Usuarios` (`id`, `nombreUsuario`, `nombre`, `password`,`tratamiento_id`,`user_photo`) VALUES
+(1, 'admin', 'Administrador', '$2y$10$O3c1kBFa2yDK5F47IUqusOJmIANjHP6EiPyke5dD18ldJEow.e0eS',2,'img/1.jpg'),
+(2, 'user', 'Usuario', '$2y$10$uM6NtF.f6e.1Ffu2rMWYV.j.X8lhWq9l8PwJcs9/ioVKTGqink6DG',1,'img/2.jpg'),
+(3, 'antonio', 'antoniogp', '$2y$10$uM6NtF.f6e.1Ffu2rMWYV.j.X8lhWq9l8PwJcs9/ioVKTGqink6DG',1,'img/3.jpg');
 

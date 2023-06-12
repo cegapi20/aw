@@ -23,7 +23,7 @@ class Usuario
     
     public static function crea($nombreUsuario, $password, $nombre, $rol)
     {
-        $user = new Usuario($nombreUsuario, self::hashPassword($password), $nombre);
+        $user = new Usuario($nombreUsuario, self::hashPassword($password), $nombre,null, null, 'path_new');
         $user->añadeRol($rol);
         return $user->guarda();
     }
@@ -37,7 +37,7 @@ class Usuario
         if ($rs) {
             $fila = $rs->fetch_assoc();
             if ($fila) {
-                $result = new Usuario($fila['nombreUsuario'], $fila['password'], $fila['nombre'], $fila['id']);
+                $result = new Usuario($fila['nombreUsuario'], $fila['password'], $fila['nombre'], $fila['id'],$fila['user_photo']);
             }
             $rs->free();
         } else {
@@ -55,7 +55,7 @@ class Usuario
         if ($rs) {
             $fila = $rs->fetch_assoc();
             if ($fila) {
-                $result = new Usuario($fila['nombreUsuario'], $fila['password'], $fila['nombre'], $fila['id']);
+                $result = new Usuario($fila['nombreUsuario'], $fila['password'], $fila['nombre'], $fila['id'],$fila['user_photo']);
             }
             $rs->free();
         } else {
@@ -196,14 +196,16 @@ class Usuario
     private $nombre;
 
     private $roles;
+    private $avatar;
 
-    private function __construct($nombreUsuario, $password, $nombre, $id = null, $roles = [])
+    private function __construct($nombreUsuario, $password, $nombre, $id = null, $roles = [], $avatar=null)
     {
         $this->id = $id;
         $this->nombreUsuario = $nombreUsuario;
         $this->password = $password;
         $this->nombre = $nombre;
         $this->roles = $roles;
+        $this->avatar = $avatar;
     }
 
     public function getId()
@@ -216,10 +218,18 @@ class Usuario
         return $this->nombreUsuario;
     }
 
+    
+
     public function getNombre()
     {
         return $this->nombre;
     }
+
+    public function getAvatar()
+    {
+        return $this->avatar;
+    }
+
 
     public function añadeRol($role)
     {
