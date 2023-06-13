@@ -251,6 +251,8 @@ class Aplicacion
         $_SESSION['nombre'] = $user->getNombre();
         $_SESSION['idUsuario'] = $user->getId();
         $_SESSION['roles'] = $user->getRoles();
+        $_SESSION['tratamiento_id'] = $user->getTratamientoId();
+        $_SESSION['tratamiento_name'] = $user->getTratamientoName();
     }
 
     public function logout()
@@ -261,6 +263,8 @@ class Aplicacion
         unset($_SESSION['nombre']);
         unset($_SESSION['idUsuario']);
         unset($_SESSION['roles']);
+        unset($_SESSION['tratamiento_id']);
+        unset($_SESSION['tratamiento_name']);
 
 
         session_destroy();

@@ -6,7 +6,7 @@
 define('BD_HOST', 'localhost');
 define('BD_NAME', 'aw');
 define('BD_USER', 'root');
-define('BD_PASS', '');
+define('BD_PASS', '12345678');
 
 /**
  * Parámetros de configuración utilizados para generar las URLs y las rutas a ficheros en la aplicación

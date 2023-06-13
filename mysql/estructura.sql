@@ -4,8 +4,18 @@
 DROP TABLE IF EXISTS `RolesUsuario`;
 DROP TABLE IF EXISTS `Roles`;
 DROP TABLE IF EXISTS `Usuarios`;
+DROP TABLE IF EXISTS `Tratamientos`;
+
+
+
 
 CREATE TABLE IF NOT EXISTS `Roles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS `Tratamientos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id`)
@@ -23,5 +33,7 @@ CREATE TABLE IF NOT EXISTS `Usuarios` (
   `nombreUsuario` varchar(30) COLLATE utf8mb4_general_ci NOT NULL UNIQUE,
   `password` varchar(70) COLLATE utf8mb4_general_ci NOT NULL,
   `nombre` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `tratamiento_id` int(11) not null,
+  FOREIGN KEY (`tratamiento_id`) REFERENCES `Tratamientos`(`id`),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

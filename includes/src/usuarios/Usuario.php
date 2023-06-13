@@ -1,4 +1,5 @@
 <?php
+
 namespace es\ucm\fdi\aw\usuarios;
 
 use es\ucm\fdi\aw\Aplicacion;
@@ -20,10 +21,10 @@ class Usuario
         }
         return false;
     }
-    
-    public static function crea($nombreUsuario, $password, $nombre, $rol)
+
+    public static function crea($nombreUsuario, $password, $nombre, $rol, $tratamiento_id)
     {
-        $user = new Usuario($nombreUsuario, self::hashPassword($password), $nombre);
+        $user = new Usuario($nombreUsuario, self::hashPassword($password), $nombre, null, null, $tratamiento_id);
         $user->añadeRol($rol);
         return $user->guarda();
     }
@@ -37,7 +38,7 @@ class Usuario
         if ($rs) {
             $fila = $rs->fetch_assoc();
             if ($fila) {
-                $result = new Usuario($fila['nombreUsuario'], $fila['password'], $fila['nombre'], $fila['id']);
+                $result = new Usuario($fila['nombreUsuario'], $fila['password'], $fila['nombre'], $fila['id'],null,$fila['tratamiento_id']);
             }
             $rs->free();
         } else {
@@ -55,7 +56,7 @@ class Usuario
         if ($rs) {
             $fila = $rs->fetch_assoc();
             if ($fila) {
-                $result = new Usuario($fila['nombreUsuario'], $fila['password'], $fila['nombre'], $fila['id']);
+                $result = new Usuario($fila['nombreUsuario'], $fila['password'], $fila['nombre'], $fila['id'],null,$fila['tratamiento_id']);
             }
             $rs->free();
         } else {
@@ -63,19 +64,41 @@ class Usuario
         }
         return $result;
     }
-    
+
     private static function hashPassword($password)
     {
         return password_hash($password, PASSWORD_DEFAULT);
     }
 
+    public static function loadTratamientos()
+    {
+        $tratamientos_array = [];
+        $conn = Aplicacion::getInstance()->getConexionBd();
+        $query = sprintf(
+            "SELECT * FROM Tratamientos TR"
+        );
+
+        $rs = $conn->query($query);
+        if ($rs) {
+            $tratamientos = $rs->fetch_all(MYSQLI_ASSOC);
+            $rs->free();
+            foreach ($tratamientos as $tr) {
+                $tratamientos_array[$tr['id']] = $tr['nombre'];
+            }
+            return $tratamientos_array;
+        } else {
+            error_log("Error BD ({$conn->errno}): {$conn->error}");
+        }
+    }
+
     private static function cargaRoles($usuario)
     {
-        $roles=[];
-            
+        $roles = [];
+
         $conn = Aplicacion::getInstance()->getConexionBd();
-        $query = sprintf("SELECT RU.rol FROM RolesUsuario RU WHERE RU.usuario=%d"
-            , $usuario->id
+        $query = sprintf(
+            "SELECT RU.rol FROM RolesUsuario RU WHERE RU.usuario=%d",
+            $usuario->id
         );
         $rs = $conn->query($query);
         if ($rs) {
@@ -83,27 +106,28 @@ class Usuario
             $rs->free();
 
             $usuario->roles = [];
-            foreach($roles as $rol) {
+            foreach ($roles as $rol) {
                 $usuario->roles[] = $rol['rol'];
             }
             return $usuario;
-
         } else {
             error_log("Error BD ({$conn->errno}): {$conn->error}");
         }
         return false;
     }
-   
+
     private static function inserta($usuario)
     {
         $result = false;
         $conn = Aplicacion::getInstance()->getConexionBd();
-        $query=sprintf("INSERT INTO Usuarios(nombreUsuario, nombre, password) VALUES ('%s', '%s', '%s')"
-            , $conn->real_escape_string($usuario->nombreUsuario)
-            , $conn->real_escape_string($usuario->nombre)
-            , $conn->real_escape_string($usuario->password)
+        $query = sprintf(
+            "INSERT INTO Usuarios(nombreUsuario, nombre, password,tratamiento_id) VALUES ('%s', '%s', '%s','%d')",
+            $conn->real_escape_string($usuario->nombreUsuario),
+            $conn->real_escape_string($usuario->nombre),
+            $conn->real_escape_string($usuario->password),
+            $conn->real_escape_string($usuario->tratamiento_id)
         );
-        if ( $conn->query($query) ) {
+        if ($conn->query($query)) {
             $usuario->id = $conn->insert_id;
             $result = self::insertaRoles($usuario);
         } else {
@@ -111,34 +135,39 @@ class Usuario
         }
         return $result;
     }
-   
+
     private static function insertaRoles($usuario)
     {
         $conn = Aplicacion::getInstance()->getConexionBd();
-        foreach($usuario->roles as $rol) {
-            $query = sprintf("INSERT INTO RolesUsuario(usuario, rol) VALUES (%d, %d)"
-                , $usuario->id
-                , $rol
+        foreach ($usuario->roles as $rol) {
+            $query = sprintf(
+                "INSERT INTO RolesUsuario(usuario, rol) VALUES (%d, %d)",
+                $usuario->id,
+                $rol
             );
-            if ( ! $conn->query($query) ) {
+            if (!$conn->query($query)) {
                 error_log("Error BD ({$conn->errno}): {$conn->error}");
                 return false;
             }
         }
         return $usuario;
     }
-    
+
     private static function actualiza($usuario)
     {
         $result = false;
         $conn = Aplicacion::getInstance()->getConexionBd();
-        $query=sprintf("UPDATE Usuarios U SET nombreUsuario = '%s', nombre='%s', password='%s' WHERE U.id=%d"
-            , $conn->real_escape_string($usuario->nombreUsuario)
-            , $conn->real_escape_string($usuario->nombre)
-            , $conn->real_escape_string($usuario->password)
-            , $usuario->id
+        $query = sprintf(
+            "UPDATE Usuarios U SET nombreUsuario = '%s', nombre='%s', password='%s', tratamiento_id='%d' WHERE U.id=%d",
+            $conn->real_escape_string($usuario->nombreUsuario),
+            $conn->real_escape_string($usuario->nombre),
+            $conn->real_escape_string($usuario->password),
+            $conn->real_escape_string($usuario->tratamiento_id),
+            $usuario->id
+
+
         );
-        if ( $conn->query($query) ) {
+        if ($conn->query($query)) {
             $result = self::borraRoles($usuario);
             if ($result) {
                 $result = self::insertaRoles($usuario);
@@ -146,41 +175,43 @@ class Usuario
         } else {
             error_log("Error BD ({$conn->errno}): {$conn->error}");
         }
-        
+
         return $result;
     }
-   
+
     private static function borraRoles($usuario)
     {
         $conn = Aplicacion::getInstance()->getConexionBd();
-        $query = sprintf("DELETE FROM RolesUsuario RU WHERE RU.usuario = %d"
-            , $usuario->id
+        $query = sprintf(
+            "DELETE FROM RolesUsuario RU WHERE RU.usuario = %d",
+            $usuario->id
         );
-        if ( ! $conn->query($query) ) {
+        if (!$conn->query($query)) {
             error_log("Error BD ({$conn->errno}): {$conn->error}");
             return false;
         }
         return $usuario;
     }
-    
+
     private static function borra($usuario)
     {
         return self::borraPorId($usuario->id);
     }
-    
+
     private static function borraPorId($idUsuario)
     {
         if (!$idUsuario) {
             return false;
-        } 
+        }
         /* Los roles se borran en cascada por la FK
          * $result = self::borraRoles($usuario) !== false;
          */
         $conn = Aplicacion::getInstance()->getConexionBd();
-        $query = sprintf("DELETE FROM Usuarios U WHERE U.id = %d"
-            , $idUsuario
+        $query = sprintf(
+            "DELETE FROM Usuarios U WHERE U.id = %d",
+            $idUsuario
         );
-        if ( ! $conn->query($query) ) {
+        if (!$conn->query($query)) {
             error_log("Error BD ({$conn->errno}): {$conn->error}");
             return false;
         }
@@ -197,13 +228,16 @@ class Usuario
 
     private $roles;
 
-    private function __construct($nombreUsuario, $password, $nombre, $id = null, $roles = [])
+    private $tratamiento_id;
+
+    private function __construct($nombreUsuario, $password, $nombre, $id = null, $roles = [], $tratamiento_id)
     {
         $this->id = $id;
         $this->nombreUsuario = $nombreUsuario;
         $this->password = $password;
         $this->nombre = $nombre;
         $this->roles = $roles;
+        $this->tratamiento_id = $tratamiento_id;
     }
 
     public function getId()
@@ -219,6 +253,16 @@ class Usuario
     public function getNombre()
     {
         return $this->nombre;
+    }
+
+    public function getTratamientoId()
+    {
+        return $this->tratamiento_id;
+    }
+
+    public function getTratamientoName()
+    {
+        return $this->tratamiento_id;
     }
 
     public function añadeRol($role)
@@ -248,7 +292,7 @@ class Usuario
     {
         $this->password = self::hashPassword($nuevoPassword);
     }
-    
+
     public function guarda()
     {
         if ($this->id !== null) {
@@ -256,7 +300,7 @@ class Usuario
         }
         return self::inserta($this);
     }
-    
+
     public function borrate()
     {
         if ($this->id !== null) {

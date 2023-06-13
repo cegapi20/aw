@@ -104,6 +104,9 @@ label {
 input {
 	display: block;
 }
+select{
+	display: block;
+}
 
 .form-field-error {
 	display: block;
