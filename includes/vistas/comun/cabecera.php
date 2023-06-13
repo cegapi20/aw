@@ -12,7 +12,12 @@ function mostrarSaludo()
 
         $formLogout = new FormularioLogout();
         $htmlLogout = $formLogout->gestiona();
-        $html = "Bienvenido, ${nombreUsuario}. $htmlLogout";
+        $tratamiento_id = $_SESSION['tratamiento_id'];
+        if($tratamiento_id == '1'){
+            $html = "Bienvenido, Profesor ${nombreUsuario}. $htmlLogout";
+        }else if($tratamiento_id == '2'){
+            $html = "Bienvenida, Profesora ${nombreUsuario}. $htmlLogout";
+        }
     } else {
         $loginUrl = $app->resuelve('/login.php');
         $registroUrl = $app->resuelve('/registro.php');

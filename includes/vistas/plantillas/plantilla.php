@@ -7,7 +7,11 @@ $mensajes = mensajesPeticionAnterior();
 <head>
 	<meta charset="UTF-8">
     <title><?= $params['tituloPagina'] ?></title>
-	<link rel="stylesheet" type="text/css" href="<?= $params['app']->resuelve('/css/estilo.css') ?>" /></head>
+	<style>
+		<?php include "css/estilo.css" ?>
+	</style>
+	
+	<!-- <link rel="stylesheet" type="text/css" href="<?= $params['app']->resuelve('/css/estilo.css') ?>" /></head> -->
 <body>
 <?= $mensajes ?>
 <div id="contenedor">
