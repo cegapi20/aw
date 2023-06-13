@@ -35,7 +35,7 @@ class Clase
         if ($rs) {
             $fila = $rs->fetch_assoc();
             if ($fila) {
-                $result = new Clase($fila['acronimo'], $fila['nombre'], $fila['acronimo_titulacion'], $fila['profesor_id'],$fila['id']);
+                $result = new Clase($fila['acronimo'], $fila['nombre'], $fila['acronimo_titulacion'], $fila['profesor_id'],$fila['id'],null);
             }
             $rs->free();
         } else {
@@ -62,6 +62,7 @@ class Clase
         if ($conn->query($query)) {
             $clase->id = $conn->insert_id;
             $result = $clase;
+            
             foreach($clase->estudiantes as $estudiante){
                 $query2 = sprintf(
                     "INSERT INTO EstudiantesClases(clase_id, nombre) VALUES ('%d', '%s')",
@@ -70,7 +71,7 @@ class Clase
                 );
 
                 if($conn->query($query2)){
-
+                    $conn->insert_id;
                 }
             }
 
@@ -119,14 +120,14 @@ class Clase
     private $estudiantes;
 
 
-    public function __construct($acronimo, $nombre, $acronimo_titulacion,$profesor_id,$id=null,$estudiantes)
+    public function __construct($acronimo, $nombre, $acronimo_titulacion,$profesor_id,$id=null,$estudiantes=[])
     {
         $this->id = $id;
         $this->acronimo = $acronimo;
         $this->nombre = $nombre;
         $this->acronimo_titulacion = $acronimo_titulacion;
         $this->profesor_id = $profesor_id;
-        $this->estudiantes = $estudiantes;
+        $this->estudiantes =$estudiantes;
     }
 
     public function getId()

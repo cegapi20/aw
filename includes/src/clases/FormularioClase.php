@@ -79,8 +79,8 @@ class FormularioClase extends Formulario
 
         $nombre = trim($datos['nombre'] ?? '');
         $nombre = filter_var($nombre, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if (!$nombre || mb_strlen($nombre) < 5 || mb_strlen($nombre) > 30) {
-            $this->errores['nombre'] = 'El nombre tiene que tener una longitud de al menos 5 caracteres.';
+        if (!$nombre || mb_strlen($nombre) < 5 || mb_strlen($nombre) > 50) {
+            $this->errores['nombre'] = mb_strlen($nombre).'El nombre tiene que tener una longitud de al menos 5 caracteres.';
         }
 
         $acronimo_titulacion = trim($datos['acronimo_titulacion'] ?? '');
@@ -93,8 +93,11 @@ class FormularioClase extends Formulario
         if(count($estudiantes)<1){
             $this->errores['estudiantes'] = 'Añade al menos 1 estudiante.';
         }
+        
+        $app = Aplicacion::getInstance();
+        $profesor_id = $app->idUsuario();
         if (count($this->errores) === 0) {
-                $clase = Clase::crea($acronimo, $nombre, $acronimo_titulacion,4,$estudiantes);
+                $clase = Clase::crea($acronimo, $nombre, $acronimo_titulacion,$profesor_id,$estudiantes);
         }
     }
 }

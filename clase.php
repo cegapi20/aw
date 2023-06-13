@@ -6,8 +6,7 @@ require_once __DIR__ . '/includes/config.php';
 
 $tituloPagina = 'Mis Clases';
 
-$profesor_id = $app->idUsuario();
-$clases = Lista::getClaseAll($profesor_id);
+$clases = Lista::getClaseAll(4);
 $filas_html = Lista::generaFilasTabla($clases);
 $count_clases = count($clases);
 
@@ -15,7 +14,7 @@ $count_clases = count($clases);
 $contenidoPrincipal = <<<EOS
   <h1>Mis clases asociadas $count_clases</h1>
   <p> Lista  “AcronimoAsignatura - NombreAsignatura (AcrónimoTitulacion)”. </p>
-  <a href="registerclase.php">Añadir una clase</a>
+  <a href="registerclase.php"></a>
   <table>
   <thead>
     <tr>

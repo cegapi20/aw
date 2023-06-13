@@ -59,9 +59,10 @@ class FormularioLogin extends Formulario
         
         if (count($this->errores) === 0) {
             $usuario = Usuario::login($nombreUsuario, $password);
+            
         
             if (!$usuario) {
-                $this->errores[] = "El usuario o el password no coinciden";
+                $this->errores[] = "El usuario o el password no coincidenaaaa";
             } else {
                 $app = Aplicacion::getInstance();
                 $app->login($usuario);

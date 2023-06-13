@@ -31,3 +31,4 @@ git push -u origin main
 git config user.name "Antonio"
 git config credential.username "cegapi20"  
 
+print_r($sa)

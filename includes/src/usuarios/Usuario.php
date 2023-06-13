@@ -19,6 +19,7 @@ class Usuario
         if ($usuario && $usuario->compruebaPassword($password)) {
             return self::cargaRoles($usuario);
         }
+        
         return false;
     }
 
@@ -31,6 +32,7 @@ class Usuario
 
     public static function buscaUsuario($nombreUsuario)
     {
+       
         $conn = Aplicacion::getInstance()->getConexionBd();
         $query = sprintf("SELECT * FROM Usuarios U WHERE U.nombreUsuario='%s'", $conn->real_escape_string($nombreUsuario));
         $rs = $conn->query($query);
@@ -38,6 +40,7 @@ class Usuario
         if ($rs) {
             $fila = $rs->fetch_assoc();
             if ($fila) {
+                
                 $result = new Usuario($fila['nombreUsuario'], $fila['password'], $fila['nombre'], $fila['id'],null,$fila['tratamiento_id']);
             }
             $rs->free();
@@ -230,7 +233,7 @@ class Usuario
 
     private $tratamiento_id;
 
-    private function __construct($nombreUsuario, $password, $nombre, $id = null, $roles = [], $tratamiento_id)
+    private function __construct($nombreUsuario, $password, $nombre, $id = null, $roles = [], $tratamiento_id = null)
     {
         $this->id = $id;
         $this->nombreUsuario = $nombreUsuario;
